@@ -1,4 +1,4 @@
-![TrapPot](doc/tpotsocial.png)
+![TrapPot](doc/logo.png)
 
 TrapPot 1.06 runs on Debian (Stable), is based heavily on
 
