@@ -1,5 +1,5 @@
 #!/bin/bash
-# T-Pot Universal Installer
+# TrapPot Universal Installer
 
 # Installer can only be executed once.
 myTPOT_INSTALL_LOG="/install.log"
@@ -13,7 +13,7 @@ fi
 # I. Global vars #
 ##################
 
-myBACKTITLE="T-Pot-Installer"
+myBACKTITLE="TrapPot-Installer"
 myCONF_FILE="/root/installer/iso.conf"
 myPROGRESSBOXCONF=" --backtitle "$myBACKTITLE" --progressbox 24 80"
 mySITES="https://ghcr.io https://github.com https://pypi.python.org https://debian.org"
@@ -25,11 +25,11 @@ myPREINSTALLPACKAGES="aria2 apache2-utils cracklib-runtime curl dialog figlet fu
 myINSTALLPACKAGES="aria2 apache2-utils apparmor apt-transport-https aufs-tools bash-completion build-essential ca-certificates cgroupfs-mount cockpit cockpit-docker console-setup console-setup-linux cracklib-runtime curl debconf-utils dialog dnsutils docker.io docker-compose ethtool fail2ban figlet genisoimage git glances grc haveged html2text htop iptables iw jq kbd libcrack2 libltdl7 libpam-google-authenticator man mosh multitail net-tools npm ntp openssh-server openssl pass pigz prips software-properties-common sshpass syslinux psmisc pv python3-pip toilet unattended-upgrades unzip vim wget wireless-tools wpasupplicant"
 myINFO="\
 ###########################################
-### T-Pot Installer for Debian (Stable) ###
+### TrapPot Installer for Debian (Stable) ###
 ###########################################
 
 Disclaimer:
-This script will install T-Pot on this system.
+This script will install TrapPot on this system.
 By running the script you know what you are doing:
 1. SSH will be reconfigured to tcp/64295.
 2. Please ensure other means of access to this system in case something goes wrong.
@@ -290,7 +290,7 @@ function fuCHECKNET {
   fi
 }
 
-# Install T-Pot dependencies
+# Install TrapPot dependencies
 function fuGET_DEPS {
   export DEBIAN_FRONTEND=noninteractive
   echo
@@ -305,7 +305,7 @@ function fuGET_DEPS {
   echo "debconf debconf/frontend select noninteractive" | debconf-set-selections -v
   apt-fast -y dist-upgrade -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes
   echo
-  echo "### Installing T-Pot dependencies."
+  echo "### Installing TrapPot dependencies."
   echo
   apt-fast -y install $myINSTALLPACKAGES
   # Remove exim4
@@ -326,7 +326,7 @@ if [ "$myTPOT_DEPLOYMENT_TYPE" == "user" ];
     echo
     echo "### Please review your running services."
     echo "### We will take care of SSH (22), but other services i.e. FTP (21), TELNET (23), SMTP (25), HTTP (80), HTTPS (443), etc."
-    echo "### might collide with T-Pot's honeypots and prevent T-Pot from starting successfully."
+    echo "### might collide with TrapPot's honeypots and prevent TrapPot from starting successfully."
     echo
     while [ 1 != 2 ]
       do
@@ -398,13 +398,13 @@ for i in "$@"
         echo "Usage: $0 <options>"
         echo
         echo "--conf=<Path to \"tpot.conf\">"
-	echo "  Use this if you want to automatically deploy a T-Pot instance (--type=auto implied)."
+	echo "  Use this if you want to automatically deploy a TrapPot instance (--type=auto implied)."
         echo "  A configuration example is available in \"tpotce/iso/installer/tpot.conf.dist\"."
         echo
         echo "--type=<[user, auto, iso]>"
-	echo "  user, use this if you want to manually install a T-Pot on a Debian (Stable) machine."
+	echo "  user, use this if you want to manually install a TrapPot on a Debian (Stable) machine."
         echo "  auto, implied if a configuration file is passed as an argument for automatic deployment."
-        echo "  iso, use this if you are a T-Pot developer and want to install a T-Pot from a pre-compiled iso."
+        echo "  iso, use this if you are a TrapPot developer and want to install a TrapPot from a pre-compiled iso."
         echo
 	exit
       ;;
@@ -429,7 +429,7 @@ if [ -s "$myTPOT_CONF_FILE" ] && [ "$myTPOT_CONF_FILE" != "" ];
       then
         source "$myTPOT_CONF_FILE"
       else
-	echo "Aborting. Config file \"$myTPOT_CONF_FILE\" not a T-Pot configuration file."
+	echo "Aborting. Config file \"$myTPOT_CONF_FILE\" not a TrapPot configuration file."
         exit
       fi
   elif ! [ -s "$myTPOT_CONF_FILE" ] && [ "$myTPOT_CONF_FILE" != "" ];
@@ -514,7 +514,7 @@ fi
 # Let's ask the user for install flavor
 if [ "$myTPOT_DEPLOYMENT_TYPE" == "iso" ] || [ "$myTPOT_DEPLOYMENT_TYPE" == "user" ];
   then
-    myCONF_TPOT_FLAVOR=$(dialog --keep-window --no-cancel --backtitle "$myBACKTITLE" --title "[ Choose Your T-Pot Edition ]" --menu \
+    myCONF_TPOT_FLAVOR=$(dialog --keep-window --no-cancel --backtitle "$myBACKTITLE" --title "[ Choose Your TrapPot Edition ]" --menu \
     "\nRequired: 8GB RAM, 128GB SSD\nRecommended: 8GB RAM, 256GB SSD" 15 70 7 \
     "STANDARD" "Honeypots, ELK, NSM & Tools" \
     "LOG4J" "Log4Pot, ELK, NSM & Tools" \
@@ -627,7 +627,7 @@ dialog --clear
 exec 2> >(tee "/install.err")
 exec > >(tee "/install.log")
 
-fuBANNER "Installing ..."
+fuBANNER "Installing TrapPot..."
 
 fuGET_DEPS
 
@@ -689,14 +689,14 @@ npm install elasticdump -g
 pip3 install elasticsearch-curator yq
 hash -r
 
-# Cloning T-Pot from GitHub
+# Cloning TrapPot from GitHub
 if ! [ "$myTPOT_DEPLOYMENT_TYPE" == "iso" ];
   then
-    fuBANNER "Cloning T-Pot"
-    git clone https://github.com/telekom-security/tpotce /opt/tpot
+    fuBANNER "Cloning TrapPot"
+    cp -R /tmp/trappot /opt/tpot
 fi
 
-# Let's create the T-Pot user
+# Let's create the TrapPot user
 fuBANNER "Create groups"
 addgroup --gid 2000 tpot
 addgroup tpotlogs
@@ -755,6 +755,10 @@ case $myCONF_TPOT_FLAVOR in
   MEDICAL)
     fuBANNER "MEDICAL"
     ln -s /opt/tpot/etc/compose/medical.yml $myTPOTCOMPOSE
+  ;;
+  LIGHT)
+    fuBANNER "LIGHT"
+    ln -s /opt/tpot/etc/compose/light.yml $myTPOTCOMPOSE
   ;;
 esac
 
@@ -902,6 +906,9 @@ fuBANNER "Update IP"
 fuBANNER "Clean up"
 apt-fast autoclean -y
 apt-fast autoremove -y
+
+# Installed
+fuBANNER "Installed TrapPot"
 
 # Final steps
 cp /opt/tpot/host/etc/rc.local /etc/rc.local && \
